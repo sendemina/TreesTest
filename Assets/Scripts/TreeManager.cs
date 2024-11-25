@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class TreeManager : MonoBehaviour
 {
-   [SerializeField] public static float growRate = 0.0001f;
+   [SerializeField] public static float growRate = 0.01f;
 }

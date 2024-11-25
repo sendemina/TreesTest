@@ -31,42 +31,45 @@ public class TreeScript : MonoBehaviour
 
     void GrowNewBranch(Vector2 root, int step, Branch parent)
     {
-        if (step >= maxSteps)
-        {
-            //GrowLeaves(root);
+        float length = 4/(step+1); //make a more organic formula for length
 
+        float angle = Random.Range(minAngle, maxAngle);
+        Vector2 end = new Vector2(root.x + Mathf.Cos(angle) * length, root.y + Mathf.Sin(angle) * length);
+        Branch newBranch = Instantiate(branch).GetComponent<Branch>();
+        newBranch.gameObject.transform.SetParent(soilTransform, true);
+        newBranch.root = root;
+        newBranch.end = end;
+        newBranch.parent = parent;
+        newBranch.rootW = 0.6f / (step + 1);
+        newBranch.endW = 0.3f / (step + 1);
+        if (parent != null)
+        {
+            parent.children.Add(newBranch);
         }
         else
         {
-            float angle = Random.Range(minAngle, maxAngle);
-            float length = 4/(step+1); //make a more organic formula for length
+            Debug.Log("parent is null");
+            newBranch.cRoot = soilTransform.position;
+            newBranch.growing = true;
+        }
 
-            
-            int children = Random.Range(2, 5);
+        int children = Random.Range(2, 5);
+        
+
+        if (step >= maxSteps)
+        {
+            newBranch.hasLeaves = true;
+            newBranch.SetUpRender(soilTransform);
+        }
+        else
+        {
+            newBranch.SetUpRender(soilTransform);
             for (int i = 0; i < children; i++)
             {
-                Vector2 end = new Vector2(root.x+Mathf.Cos(angle) * length, root.y+Mathf.Sin(angle) * length);
-                Branch newBranch = Instantiate(branch).GetComponent<Branch>();
-                newBranch.gameObject.transform.SetParent(soilTransform, true);
-                newBranch.root = root;
-                newBranch.end = end;
-                newBranch.parent = parent;
-                newBranch.rootW = 0.6f/(step+1); 
-                newBranch.endW = 0.3f/(step+1);
-                if (parent != null)
-                {
-                    parent.children.Add(newBranch);
-                }
-                else 
-                {
-                    newBranch.cRoot = soilTransform.position;
-                }
-
-                newBranch.SetUpRender();
-                if (step >= maxSteps) { newBranch.hasLeaves = true; }
-                else { GrowNewBranch(end, step + 1, newBranch); }
+                GrowNewBranch(end, step + 1, newBranch);
             }
         }
+        
     }
 
 
