@@ -6,8 +6,8 @@ using UnityEngine;
 public class TreeScript : MonoBehaviour
 {
     [SerializeField] GameObject branch;
-    [SerializeField] GameObject leaves;
-    Transform soilTransform;
+    [SerializeField] public GameObject leaves;
+    public Transform soilTransform;
     LineRenderer lineRenderer;
 
     //variables based on seed
@@ -24,22 +24,24 @@ public class TreeScript : MonoBehaviour
 
         maxSteps = Random.Range(3,6);
         soilTransform = GetComponent<Transform>();
-        GrowNewBranch(soilTransform.position, 0);
+        NewTree();
 
     }
 
-    void GrowNewBranch(Vector2 root, int step)
+
+    void GrowNewBranch(Vector2 root, int step, Branch parent)
     {
         if (step >= maxSteps)
         {
-            GrowLeaves(root);
+            //GrowLeaves(root);
+
         }
         else
         {
             float angle = Random.Range(minAngle, maxAngle);
             float length = 4/(step+1); //make a more organic formula for length
 
-            //int children = 2;
+            
             int children = Random.Range(2, 5);
             for (int i = 0; i < children; i++)
             {
@@ -48,21 +50,25 @@ public class TreeScript : MonoBehaviour
                 newBranch.gameObject.transform.SetParent(soilTransform, true);
                 newBranch.root = root;
                 newBranch.end = end;
-                newBranch.RenderBranch();
+                newBranch.parent = parent;
+                newBranch.rootW = 0.6f/(step+1); 
+                newBranch.endW = 0.3f/(step+1);
+                if (parent != null)
+                {
+                    parent.children.Add(newBranch);
+                }
+                else 
+                {
+                    newBranch.cRoot = soilTransform.position;
+                }
 
-                GrowNewBranch(end, step+1);
+                newBranch.SetUpRender();
+                if (step >= maxSteps) { newBranch.hasLeaves = true; }
+                else { GrowNewBranch(end, step + 1, newBranch); }
             }
         }
     }
 
-
-
-    void GrowLeaves(Vector2 root)
-    {
-        GameObject newLeaves = Instantiate(leaves);
-        newLeaves.transform.position = root;
-        newLeaves.transform.SetParent(soilTransform, true);
-    }
 
     public void NewTree()
     {
@@ -70,8 +76,11 @@ public class TreeScript : MonoBehaviour
         {
             Object.Destroy(child.gameObject);
         }
-        GrowNewBranch(soilTransform.position, 0);
+        int trunksN = Random.Range(1, 3);
+        for (int i = 0; i < trunksN; i++)
+        {
+            GrowNewBranch(soilTransform.position, 0, null);
+        }
     }
 
-    //for animation: coroutine - grow a branch
 }
