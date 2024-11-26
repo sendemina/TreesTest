@@ -153,6 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   branch: {fileID: 5236726868063101416, guid: e960d93daf8d48b4eb60971a7abf7253, type: 3}
   leaves: {fileID: 2941194533592806630, guid: 15d6d1b5596ab2044ae9388a61da5309, type: 3}
+  soilTransform: {fileID: 0}
 --- !u!4 &74935282
 Transform:
   m_ObjectHideFlags: 0
@@ -162,7 +163,7 @@ Transform:
   m_GameObject: {fileID: 74935280}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -3.2, z: 0}
+  m_LocalPosition: {x: -0, y: -4.34, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

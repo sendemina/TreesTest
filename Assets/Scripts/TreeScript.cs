@@ -31,15 +31,21 @@ public class TreeScript : MonoBehaviour
 
     void GrowNewBranch(Vector2 root, int step, Branch parent)
     {
-        float length = 4/(step+1); //make a more organic formula for length
+        float length = 2f/((step+1)/2f); //make a more organic formula for length
+        float angle;
+        //angle relative to the parent
+        if (parent != null) { angle = Random.Range(minAngle/2+parent.angle, -maxAngle+parent.angle); }
+        else { angle = Random.Range(minAngle, maxAngle); }
 
-        float angle = Random.Range(minAngle, maxAngle);
+        //float angle = Random.Range(minAngle+step*Mathf.PI/8, maxAngle-step*Mathf.PI/8);
+        //float angle = Random.Range(minAngle, maxAngle);
         Vector2 end = new Vector2(root.x + Mathf.Cos(angle) * length, root.y + Mathf.Sin(angle) * length);
         Branch newBranch = Instantiate(branch).GetComponent<Branch>();
         newBranch.gameObject.transform.SetParent(soilTransform, true);
         newBranch.root = root;
         newBranch.end = end;
         newBranch.parent = parent;
+        newBranch.angle = angle;
         newBranch.rootW = 0.6f / (step + 1);
         newBranch.endW = 0.3f / (step + 1);
         if (parent != null)

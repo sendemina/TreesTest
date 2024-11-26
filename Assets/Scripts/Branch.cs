@@ -21,6 +21,8 @@ public class Branch : MonoBehaviour
     public bool hasLeaves = false;
     public bool growing = false;
 
+    public float angle;
+
     public void SetUpRender(Transform soilT)
     {
         soilTransform = soilT;
@@ -90,7 +92,7 @@ public class Branch : MonoBehaviour
     void DrawLeaves()
     {
         leaves.transform.position = cEnd;
-        if (growing) { leaves.transform.localScale *= 1.003f; }
+        if (growing) { leaves.transform.localScale *= 1.002f; }
         //change hue
     }
 
